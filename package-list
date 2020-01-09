@@ -1,0 +1,8 @@
+de.gematik.ti.cardreader.provider.api
+de.gematik.ti.cardreader.provider.api.card
+de.gematik.ti.cardreader.provider.api.command
+de.gematik.ti.cardreader.provider.api.entities
+de.gematik.ti.cardreader.provider.api.events
+de.gematik.ti.cardreader.provider.api.events.card
+de.gematik.ti.cardreader.provider.api.listener
+de.gematik.ti.cardreader.provider.spi
