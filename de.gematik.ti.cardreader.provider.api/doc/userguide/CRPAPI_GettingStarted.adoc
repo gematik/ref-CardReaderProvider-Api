@@ -9,7 +9,7 @@ To use CardReaderProvider API library in a project, you need just to include fol
 .Gradle dependency settings to use CardReaderProvider API library
 [source,groovy,subs="attributes+"]
 dependencies {
-    implementation group: 'de.gematik.ti', name: 'cardreader.provider.api', version: '1.2.0'
+    implementation group: 'de.gematik.ti', name: 'cardreader.provider.api', version: '1.2.1'
 }
 
 .Maven dependency settings to use CardReaderProvider API library
@@ -18,6 +18,6 @@ dependencies {
     <dependency>
         <groupId>de.gematik.ti</groupId>
         <artifactId>cardreader.provider.api</artifactId>
-        <version>1.2.0</version>
+        <version>1.2.1</version>
     </dependency>
 </dependencies>
