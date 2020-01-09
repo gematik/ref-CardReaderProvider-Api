@@ -1,0 +1,7 @@
+include::config.adoc[]
+
+= CardReaderProvider API
+
+include::CRPAPI_Introduction.adoc[]
+include::CRPAPI_Overview.adoc[]
+include::CRPAPI_GettingStarted.adoc[]

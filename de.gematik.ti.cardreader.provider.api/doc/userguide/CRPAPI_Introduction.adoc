@@ -1,0 +1,14 @@
+ifndef::javadoc[]
+include::config.adoc[]
+endif::javadoc[]
+
+== Introduction
+
+The CardReaderProvider API define the general communication interface between application and HealthCardReader to abstract the specific implementation for each hardware card reader.
+This part describes the usage of low level CardReaderProvider API in order to use CardReader in your application.
+
+.CardReaderProvider API Layer
+image::root/crpapi_layer.png[caption="{figure-caption} {counter:figure}: ",650]
+
+
+The CardReaderProvider for each specific hardware are implemented as Java Service Provider and would load dynamically by ServiceLoader implemented in CardReaderAccess.

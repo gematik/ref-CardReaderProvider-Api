@@ -1,0 +1,62 @@
+@startuml
+
+
+
+  namespace de.gematik.ti.cardreader.provider.api {
+    namespace events {
+      namespace card {
+        class de.gematik.ti.cardreader.provider.api.events.card.CardAbsentEvent {
+            + CardAbsentEvent()
+        }
+      }
+    }
+  }
+  
+
+  namespace de.gematik.ti.cardreader.provider.api {
+    namespace events {
+      namespace card {
+        class de.gematik.ti.cardreader.provider.api.events.card.CardPresentEvent {
+            + CardPresentEvent()
+        }
+      }
+    }
+  }
+  
+
+  namespace de.gematik.ti.cardreader.provider.api {
+    namespace events {
+      namespace card {
+        class de.gematik.ti.cardreader.provider.api.events.card.CardTimeoutEvent {
+            + CardTimeoutEvent()
+        }
+      }
+    }
+  }
+  
+
+  namespace de.gematik.ti.cardreader.provider.api {
+    namespace events {
+      namespace card {
+        class de.gematik.ti.cardreader.provider.api.events.card.CardUnknownEvent {
+            + CardUnknownEvent()
+        }
+      }
+    }
+  }
+  
+
+  de.gematik.ti.cardreader.provider.api.events.card.CardAbsentEvent -up-|> de.gematik.ti.cardreader.provider.api.events.AbstractCardReaderEvent
+  de.gematik.ti.cardreader.provider.api.events.card.CardPresentEvent -up-|> de.gematik.ti.cardreader.provider.api.events.AbstractCardReaderEvent
+  de.gematik.ti.cardreader.provider.api.events.card.CardTimeoutEvent -up-|> de.gematik.ti.cardreader.provider.api.events.AbstractCardReaderEvent
+  de.gematik.ti.cardreader.provider.api.events.card.CardUnknownEvent -up-|> de.gematik.ti.cardreader.provider.api.events.AbstractCardReaderEvent
+
+
+
+
+
+
+
+
+
+@enduml

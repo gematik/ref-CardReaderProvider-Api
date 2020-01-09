@@ -1,0 +1,25 @@
+@startuml
+
+
+
+  namespace de.gematik.ti.cardreader.provider.api {
+    namespace listener {
+      enum InitializationStatus {
+        INIT_FAILED
+        INIT_NECESSARY
+        INIT_SUCCESS
+      }
+    }
+  }
+  
+
+
+
+
+
+
+
+
+
+
+@enduml

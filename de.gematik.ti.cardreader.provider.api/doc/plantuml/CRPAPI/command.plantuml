@@ -1,0 +1,135 @@
+@startuml
+
+
+
+  namespace de.gematik.ti.cardreader.provider.api {
+    namespace command {
+      abstract class de.gematik.ti.cardreader.provider.api.command.AbstractApdu {
+          {static} + EXPECTED_LENGTH_WILDCARD_EXTENDED : int
+          {static} + EXPECTED_LENGTH_WILDCARD_SHORT : int
+          {static} ~ BYTE_MASK : int
+          {static} ~ encodeDataLengthExtended()
+          {static} ~ encodeDataLengthShort()
+          {static} ~ encodeExpectedLengthExtended()
+          {static} ~ encodeExpectedLengthShort()
+      }
+    }
+  }
+  
+
+  namespace de.gematik.ti.cardreader.provider.api {
+    namespace command {
+      abstract class de.gematik.ti.cardreader.provider.api.command.AbstractCommandApdu {
+          - apdu : ByteArrayOutputStream
+          - data : byte[]
+          - header : byte[]
+          - ne : Integer
+          + equals()
+          + getBytes()
+          + getCla()
+          + getData()
+          + getIns()
+          + getNc()
+          + getNe()
+          + getP1()
+          + getP2()
+          + hashCode()
+          + toString()
+          # setData()
+          # setHeader()
+          # setNe()
+          - calculate()
+          - doCase2sOr2e()
+          - doCase3sOr3e()
+          - doCase4sOr4e()
+          - getApdu()
+          - resetApduBuffer()
+      }
+    }
+  }
+  
+
+  namespace de.gematik.ti.cardreader.provider.api {
+    namespace command {
+      class de.gematik.ti.cardreader.provider.api.command.AbstractResponseApdu {
+          - apdu : byte[]
+          + equals()
+          + getBytes()
+          + getData()
+          + getNr()
+          + getSW()
+          + getSW1()
+          + getSW2()
+          + hashCode()
+          ~ AbstractResponseApdu()
+      }
+    }
+  }
+  
+
+  namespace de.gematik.ti.cardreader.provider.api {
+    namespace command {
+      class de.gematik.ti.cardreader.provider.api.command.CommandApdu {
+          + CommandApdu()
+          + CommandApdu()
+          + CommandApdu()
+          + CommandApdu()
+      }
+    }
+  }
+  
+
+  namespace de.gematik.ti.cardreader.provider.api {
+    namespace command {
+      interface de.gematik.ti.cardreader.provider.api.command.ICommandApdu {
+          {abstract} + getBytes()
+          {abstract} + getCla()
+          {abstract} + getData()
+          {abstract} + getIns()
+          {abstract} + getNc()
+          {abstract} + getNe()
+          {abstract} + getP1()
+          {abstract} + getP2()
+      }
+    }
+  }
+  
+
+  namespace de.gematik.ti.cardreader.provider.api {
+    namespace command {
+      interface de.gematik.ti.cardreader.provider.api.command.IResponseApdu {
+          {abstract} + getBytes()
+          {abstract} + getData()
+          {abstract} + getNr()
+          {abstract} + getSW()
+          {abstract} + getSW1()
+          {abstract} + getSW2()
+      }
+    }
+  }
+  
+
+  namespace de.gematik.ti.cardreader.provider.api {
+    namespace command {
+      class de.gematik.ti.cardreader.provider.api.command.ResponseApdu {
+          + ResponseApdu()
+      }
+    }
+  }
+  
+
+  de.gematik.ti.cardreader.provider.api.command.AbstractCommandApdu .up.|> de.gematik.ti.cardreader.provider.api.command.ICommandApdu
+  de.gematik.ti.cardreader.provider.api.command.AbstractCommandApdu -up-|> de.gematik.ti.cardreader.provider.api.command.AbstractApdu
+  de.gematik.ti.cardreader.provider.api.command.AbstractResponseApdu .up.|> de.gematik.ti.cardreader.provider.api.command.IResponseApdu
+  de.gematik.ti.cardreader.provider.api.command.CommandApdu -up-|> de.gematik.ti.cardreader.provider.api.command.AbstractCommandApdu
+  de.gematik.ti.cardreader.provider.api.command.ResponseApdu -up-|> de.gematik.ti.cardreader.provider.api.command.AbstractResponseApdu
+
+
+
+
+
+
+
+
+
+@enduml

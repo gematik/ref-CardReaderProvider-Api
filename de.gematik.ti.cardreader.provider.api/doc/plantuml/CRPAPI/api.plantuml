@@ -1,0 +1,56 @@
+@startuml
+
+
+
+  namespace de.gematik.ti.cardreader.provider.api {
+    abstract class de.gematik.ti.cardreader.provider.api.AbstractCardReaderController {
+        + createCardEventTransmitter()
+        # informAboutReaderConnection()
+        # informAboutReaderDisconnection()
+    }
+  }
+  
+
+  namespace de.gematik.ti.cardreader.provider.api {
+    class de.gematik.ti.cardreader.provider.api.CardEventTransmitter {
+        {static} - LOG : Logger
+        + informAboutCardAbsent()
+        + informAboutCardPresent()
+        + informAboutCardTimeout()
+        + informAboutCardUnknown()
+        ~ CardEventTransmitter()
+    }
+  }
+  
+
+  namespace de.gematik.ti.cardreader.provider.api {
+    interface de.gematik.ti.cardreader.provider.api.ICardReader {
+        {abstract} + connect()
+        + getDisplayName()
+        {abstract} + getName()
+        {abstract} + initialize()
+        {abstract} + isCardPresent()
+        {abstract} + isInitialized()
+    }
+  }
+  
+
+  namespace de.gematik.ti.cardreader.provider.api {
+    interface de.gematik.ti.cardreader.provider.api.ICardReaderController {
+        {abstract} + getCardReaders()
+    }
+  }
+  
+
+  de.gematik.ti.cardreader.provider.api.AbstractCardReaderController .up.|> de.gematik.ti.cardreader.provider.api.ICardReaderController
+  de.gematik.ti.cardreader.provider.api.CardEventTransmitter o-- de.gematik.ti.cardreader.provider.api.ICardReader : cardReader
+
+
+
+
+
+
+
+
+
+@enduml

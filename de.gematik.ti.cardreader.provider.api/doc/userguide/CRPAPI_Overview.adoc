@@ -1,0 +1,243 @@
+include::config.adoc[]
+
+== Overview
+
+This library provides a general (Java SPI) API for abstracting card reader specific implementations.
+On mobile devices, each card reader has its own driver and controller implemention provided by card reader manufacturer and thus needs an own provider implementation adapting it to this generic API.
+Card reader provider implementations are loaded during runtime by Java's Service Provider (SPI) mechanism.
+The necessary artifacts to implement such a service provider are described in following chapters.
+
+=== Service Provider [[provider]]
+// tag::ServiceProvider[]
+The entry point for the ServiceLoader is ICardReaderControllerProvider Interface.
+This Interface returns the specific <<CardReaderController>> implementation and a <<Descriptor>> class
+
+ifndef::useCachePlantuml[]
+
+.ICardTerminalControllerProvider
+[plantuml,crpapi/generated/spi,png,caption="{classdia-caption} {counter:class}: "]
+----
+include::{plantumldir}/CRPAPI/spi.plantuml[]
+----
+
+endif::useCachePlantuml[]
+ifdef::useCachePlantuml[]
+
+.ICardTerminalControllerProvider
+image::CRPAPI/generated/spi.png[caption="{classdia-caption} {counter:class}: "]
+
+{empty} +
+
+endif::useCachePlantuml[]
+
+// end::ServiceProvider[]
+The specific cardreader.provider needs a descriptor within folder `YOUR.PROVIDER\src\main\resources\META-INF\services` with filename
+`de.gematik.ti.cardreader.provider.spi.ICardReaderControllerProvider` and the content of the package and class which implements the service provider interface e.g. `de.gematik.ti.cardreader.provider.pcsc.control.CardReaderProvider`
+
+.File META-INF services
+image::CRPAPI/MetaInfServices.png[caption="{figure-caption} {counter:figure}: "]
+{empty} +
+
+
+=== Descriptor
+// tag::ProviderDescriptor[]
+Each implementation of cardreader provider contains an descriptor which contains information about name, licence, provider descriptions, etc.
+This class implements the `IProviderDescriptor` interface.
+The CardReaderProvider API delivers a default implementation with the class `ProviderDesciptor`.
+
+ifndef::useCachePlantuml[]
+
+.ProviderDescriptor
+[plantuml,CRPAPI/generated/entities,png,caption="{classdia-caption} {counter:class}: "]
+----
+include::{plantumldir}/CRPAPI/entities.plantuml[]
+----
+
+endif::useCachePlantuml[]
+ifdef::useCachePlantuml[]
+
+.ProviderDescriptor
+image::CRPAPI/generated/entities.png[caption="{classdia-caption} {counter:class}: "]
+
+{empty} +
+
+endif::useCachePlantuml[]
+// end::ProviderDescriptor[]
+
+=== CardReaderController [[crpapi_cardreadercontroller]]
+// tag::CardReaderController[]
+The cardreader provider needs an implementation class of `ICardReaderController` interface.
+This class handles the card reader for the higher layer application.
+The application could request available <<CardReader>>.
+CardReaderProvider API provides a default implementation of `ICardReaderController`
+interface as abstract class `AbstractCardReaderController` for ease of use.
+The abstract class handles event bus communication and provides methods to inform registered subscribers about card reader changes.
+
+ifndef::useCachePlantuml[]
+
+.ICardReaderController
+[plantuml,crpapi/generated/api,png,caption="{classdia-caption} {counter:class}: "]
+----
+include::{plantumldir}/CRPAPI/api.plantuml[]
+----
+
+endif::useCachePlantuml[]
+ifdef::useCachePlantuml[]
+
+.ICardReaderController
+image::CRPAPI/generated/api.png[caption="{classdia-caption} {counter:class}: "]
+
+{empty} +
+
+endif::useCachePlantuml[]
+
+
+// end::CardReaderController[]
+=== CardReaderConnectionEvents
+// tag::CardReaderConnectionEvents[]
+Each class which should send connection and disconnection events of card reader must register itself as Subscriber at EventBus.
+The <<CardReaderController>>
+informs about new card reader and disconnected card reader by sending appropriate events on EventBus.
+The information about new card reader contains additional information about `InitializationStatus`.
+This information is important for higher layers to decide on the initialisation procedure e.g. request permissions.
+
+ifndef::useCachePlantuml[]
+
+.Card Reader connection events
+[plantuml,crpapi/generated/events,png,caption="{classdia-caption} {counter:class}: "]
+----
+include::{plantumldir}/CRPAPI/events.plantuml[]
+----
+
+endif::useCachePlantuml[]
+ifdef::useCachePlantuml[]
+
+.Card Reader connection events
+image::CRPAPI/generated/events.png[caption="{classdia-caption} {counter:class}: "]
+
+{empty} +
+
+endif::useCachePlantuml[]
+
+Each class interested in connection events can register a `CardReaderConnectedEvent` and `CardReaderDisconnectedEvent` receiving method at Eventbus.
+
+[source,java]
+.CardReaderConnectedEvent Example
+----
+include::{testdir}/cardreader/provider/api/EventBusConnectionsDocuTest.java[indent=0,tags=CardReaderConnectedEvent]
+----
+
+// end::CardReaderConnectionEvents[]
+=== CardEvents
+// tag::CardEvents[]
+Each class which should inform about card events from card reader must register as subscriber at EventBus.
+The <<CardEventTransmitter>>
+informs about events on EventBus.
+
+ifndef::useCachePlantuml[]
+
+.Card Events
+[plantuml,crpapi/generated/card,png,caption="{classdia-caption} {counter:class}: "]
+----
+include::{plantumldir}/CRPAPI/card.plantuml[]
+----
+
+endif::useCachePlantuml[]
+ifdef::useCachePlantuml[]
+
+.Card Events
+image::CRPAPI/generated/card.png[caption="{classdia-caption} {counter:class}: "]
+
+{empty} +
+
+endif::useCachePlantuml[]
+
+Eeach interested class can register a `CardPresentEvent`, `CardAbsentEvent`, ... receiving method at Eventbus.
+
+[source,java]
+.CardEvent Example
+----
+include::{testdir}/cardreader/provider/api/AbstractCardEventTransmitterTest.java[indent=0,tags=CardPresentEventDocu]
+----
+
+=== CardEventTransmitter
+// tag::CardEventTransmitter[]
+Each class which should inform about card presence events must register itself as subscriber at EventBus.
+The <<CardReaderController>>
+creates a CardEventTransmitter for each card reader.
+This transmitter informs about new cards, absent cards, timeouts and unknown cards with appropriate events on EventBus.
+
+ifndef::useCachePlantuml[]
+
+.Card connection events
+[plantuml,crpapi/generated/api,png,caption="{classdia-caption} {counter:class}: "]
+----
+include::{plantumldir}/CRPAPI/api.plantuml[]
+----
+
+endif::useCachePlantuml[]
+ifdef::useCachePlantuml[]
+
+.Card connection events
+image::CRPAPI/generated/api.png[caption="{classdia-caption} {counter:class}: "]
+
+{empty} +
+
+endif::useCachePlantuml[]
+
+Example how to send card events with ``CardEventTransmitter``
+
+[source,java]
+.CardEventTransmitter Example
+----
+include::{testdir}/cardreader/provider/api/CardEventTransmitterDocuTest.java[indent=0,tags=CardEventTransmitter]
+----
+
+// end::CardEventTransmitter[]
+
+=== CardReader
+// tag::CardReader[]
+The physical card reader is represented by a class implementing `ICardReader` interface.
+This class handles card reader's initialisation status and card.
+
+ifndef::useCachePlantuml[]
+
+.ICardReader
+[plantuml,crpapi/generated/api,png,caption="{classdia-caption} {counter:class}: "]
+----
+include::{plantumldir}/CRPAPI/api.plantuml[]
+----
+
+endif::useCachePlantuml[]
+ifdef::useCachePlantuml[]
+
+.ICardReader
+image::CRPAPI/generated/api.png[caption="{classdia-caption} {counter:class}: "]
+
+{empty} +
+
+endif::useCachePlantuml[]
+
+// end::CardReader[]
+
+=== Card Commands
+
+The Api provides an general structure of a card command and responses, so called APDU. The detailed implementation of all specific commands healtcards can process is done in a higher layers library.
+
+ifndef::useCachePlantuml[]
+
+.Card Commands
+[plantuml,crpapi/generated/command,png,caption="{classdia-caption} {counter:class}: "]
+----
+include::{plantumldir}/CRPAPI/command.plantuml[]
+----
+
+endif::useCachePlantuml[]
+ifdef::useCachePlantuml[]
+
+.Card Commands
+image::CRPAPI/generated/command.png[caption="{classdia-caption} {counter:class}: "]
+
+{empty} +
+
+endif::useCachePlantuml[]

@@ -1,0 +1,22 @@
+@startuml
+
+
+
+  namespace de.gematik.ti.cardreader.provider.spi {
+    interface de.gematik.ti.cardreader.provider.spi.ICardReaderControllerProvider {
+        {abstract} + getCardReaderController()
+        {abstract} + getDescriptor()
+    }
+  }
+  
+
+
+
+
+
+
+
+
+
+
+@enduml
